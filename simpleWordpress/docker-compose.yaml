@@ -1,0 +1,17 @@
+version: '3'
+services:
+  wordpress:
+    build: .
+    ports:
+      - "8080:80"
+    links:
+      - database
+  database:
+    image: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=plasak 
+      - MYSQL_DATABASE=plasak
+      - MYSQL_USER=plasak
+      - MYSQL_PASSWORD=plasak
+    expose:
+      - "3306"
