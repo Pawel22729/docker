@@ -1,0 +1,17 @@
+version: "3"
+services:
+  webFront:
+    image: httpd:latest
+    ports:
+      - "80:80"
+    links:
+      - "webBack:database"
+  webBack:
+    image: mysql:latest
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=plasak
+      - MYSQL_DATABASE=plasak
+      - MYSQL_USER=plasak
+      - MYSQL_PASSWORD=plasak

@@ -1,0 +1,23 @@
+version: '3'
+services:
+  webProxy:
+    image: nginx
+    networks:
+      - front
+    ports:
+      - "80:80"
+  app:
+    image: nginx
+    networks:
+      - front
+      - back
+  webBackend:
+    image: nginx
+    networks:
+      - back
+
+networks:
+  front:
+    driver: bridge
+  back:
+    driver: bridge
