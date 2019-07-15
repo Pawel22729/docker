@@ -1,10 +1,56 @@
 version: "3"
 services:
-  my-redis-1:
-    image: my-redis
+  build-redis:
     build:
       context: .
-      args:
-        PORT: 7000
+      dockerfile: Dockerfile
+    image: my-redis
+  build-cluster:
+    build:
+      context: .
+      dockerfile: Dockerfile_redis_cluster
+    image: my-redis-cluster
+  redis1:
+    image: my-redis
+    command: "7000"
+    network_mode: "host"
     ports:
-      - 7000:7000
+      - "7000:7000"
+  redis2:
+    image: my-redis
+    command: "7001"
+    network_mode: "host"
+    ports:
+      - "7001:7001"
+  redis3:
+    network_mode: "host"
+    image: my-redis
+    command: "7002"
+    network_mode: "host"
+    ports:
+      - "7002:7002"
+  redis4:
+    image: my-redis
+    command: "7003"
+    network_mode: "host"
+    ports:
+      - "7003:7003"
+  redis5:
+    image: my-redis
+    command: "7004"
+    network_mode: "host"
+    ports:
+      - "7004:7004"
+  redis6:
+    image: my-redis
+    command: "7005"
+    network_mode: "host"
+    ports:
+      - "7005:7005"
+  redis_cluster:
+    image: my-redis-cluster
+    command: >
+      bash -c "
+        sleep 10;
+        printf 'yes' | /opt/redis-cli --cluster create 127.0.0.1:7000 127.0.0.1:7001 127.0.0.1:7002 127.0.0.1:7003 127.0.0.1:7004 127.0.0.1:7005 --cluster-replicas 1"
+    network_mode: "host"

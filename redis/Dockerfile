@@ -16,3 +16,4 @@ COPY --from=builder /opt/redis_build/src/redis-server .
 COPY redis.conf .
 ENTRYPOINT [ "./redis-server", "./redis.conf", "--protected-mode no", "--port" ]
 CMD [ "${PORT}" ]
+
