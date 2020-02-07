@@ -1,0 +1,11 @@
+FROM ubuntu:18.04
+
+RUN apt update -y && \
+	apt install etcd -y && \
+        apt install iproute2 -y && \
+	apt install dnsutils -y && \
+	mkdir -p /etc/etcd
+
+COPY etcd.sh
+RUN chown +x etcd.sh
+ENTRYPOINT [""]

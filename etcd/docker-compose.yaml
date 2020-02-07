@@ -1,0 +1,7 @@
+version: "3"
+services:
+  etcd-service:
+    image: etcd-ubuntu
+    build:
+      context: .
+      dockerfile: Dockerfile

@@ -1,0 +1,3 @@
+#!/bin/bash
+docker run -it --rm --name server2 --network testing --ip 172.18.0.5 -e 'ETCD_NAME=“server2”' -e 'ETCD_INITIAL_CLUSTER="5944be0dcc4c=http://172.18.0.2:2380,server2=http://172.18.0.5:2380”' -e 'ETCD_INITIAL_CLUSTER_STATE=existing' -e "ETCD_ADVERTISE_CLIENT_URLS=http://172.18.0.2:2379,http://172.18.0.5:2379" -e "ETCD_LISTEN_PEER_URLS=http://172.18.0.3:2380,http://172.18.0.5:2380" etcd-ubuntu
+

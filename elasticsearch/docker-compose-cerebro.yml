@@ -1,0 +1,12 @@
+version: '2.2'
+services:
+  cerebro1:
+    image: lmenezes/cerebro:0.8.3
+    ports:
+      - 9000:9000
+    networks:
+      - elastic 
+
+networks:
+  elastic:
+    driver: bridge
