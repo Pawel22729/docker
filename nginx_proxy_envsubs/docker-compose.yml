@@ -1,0 +1,14 @@
+version: '3'
+services:
+  nginx_top_container:
+    build:
+      context: .
+      dockerfile: Dockerfile_top_container
+    image: base:latest  
+
+  nginx_proxy:
+    build:
+      context: .
+      dockerfile: Dockerfile_proxy_container
+    ports:
+      - 8080:8080

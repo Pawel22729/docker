@@ -1,0 +1,14 @@
+FROM base:latest
+
+ENV LISTEN_PORT=8080 \
+  SERVER_NAME=_ \
+  RESOLVER=8.8.8.8 \
+  UPSTREAM=www.wp.pl \
+  UPSTREAM_PROTO=http \
+  ESC='$'
+
+COPY entrypoint.sh /entrypoint.sh
+
+COPY proxy.conf.tmpl /etc/nginx/conf.d/proxy.conf.tmpl
+
+ENTRYPOINT ["./entrypoint.sh"]
