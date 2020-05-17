@@ -8,7 +8,7 @@ services:
       - cluster.name=elastic_cluster1
       - discovery.zen.ping.unicast.hosts=es2,es3
       - bootstrap.memory_lock=false
-      - path.repo=/usr/share/elasticsearch/data/backup
+      - path.repo=/tmp/backup
         #- "ES_JAVA_OPTS=-Xms512m -Xms512m"
       - xpack.security.enabled=false
       - xpack.watcher.enabled=false
@@ -21,6 +21,7 @@ services:
         hard: -1
     volumes: 
       - /tmp/data1:/usr/share/elasticsearch/data
+      - /tmp/backup:/tmp/backup  
     ports:
       - 9200:9200
     networks:
@@ -34,7 +35,7 @@ services:
       - cluster.name=elastic_cluster1
       - discovery.zen.ping.unicast.hosts=es1,es3
       - bootstrap.memory_lock=false
-      - path.repo=/usr/share/elasticsearch/data/backup      
+      - path.repo=/tmp/backup      
       - xpack.security.enabled=false
       - xpack.watcher.enabled=false
       - xpack.monitoring.enabled=false
@@ -46,6 +47,7 @@ services:
         hard: -1
     volumes: 
       - /tmp/data2:/usr/share/elasticsearch/data
+      - /tmp/backup:/tmp/backup  
     networks:
       - elastic
    
@@ -57,7 +59,7 @@ services:
       - cluster.name=elastic_cluster1
       - discovery.zen.ping.unicast.hosts=es1,es2
       - bootstrap.memory_lock=false
-      - path.repo=/usr/share/elasticsearch/data/backup
+      - path.repo=/tmp/backup
       - xpack.security.enabled=false
       - xpack.watcher.enabled=false
       - xpack.monitoring.enabled=false
@@ -69,6 +71,7 @@ services:
         hard: -1
     volumes: 
       - /tmp/data3:/usr/share/elasticsearch/data
+      - /tmp/backup:/tmp/backup  
     networks:
       - elastic
 
@@ -81,4 +84,4 @@ services:
 
 networks:
   elastic:
-    driver: bridge        
+    driver: bridge
