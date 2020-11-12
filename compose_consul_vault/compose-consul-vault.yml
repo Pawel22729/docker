@@ -1,0 +1,67 @@
+version: '3'
+
+services:
+
+  consul-agent-1: &consul-agent
+    volumes:
+      - consul-agent-1:/consul/data
+    image: consul:latest
+    networks:
+      - vault-consul
+    command: "agent -retry-join consul -client 0.0.0.0"
+
+  consul-agent-2:
+    <<: *consul-agent
+    volumes:
+      - consul-agent-2:/consul/data
+
+  consul-agent-3:
+    <<: *consul-agent
+    volumes:
+      - consul-agent-3:/consul/data
+
+  consul-server-1: &consul-server
+    <<: *consul-agent
+    volumes:
+      - consul-server-1:/consul/data
+    command: "agent -server -retry-join consul -client 0.0.0.0"
+
+  consul-server-2:
+    <<: *consul-server
+    volumes:
+      - consul-server-2:/consul/data
+
+  consul:
+    container_name: consul-server
+    <<: *consul-agent
+    volumes:
+      - consul-bootstrap:/consul/data
+    ports:
+      - "8400:8400"
+      - "8500:8500"
+      - "8600:8600"
+      - "8600:8600/udp"
+    command: "agent -server -bootstrap-expect 3 -ui -client 0.0.0.0"
+
+  vault-1:
+    image: vault:latest
+    networks:
+      - vault-consul
+    ports:
+      - "8200:8200"  
+    environment:
+      - VAULT_LOCAL_CONFIG={"backend":{"consul":{"address":"consul:8500","path":"vault/"}},"listener":{"tcp":{"address":"0.0.0.0:8200","tls_disable":1}},"ui":true}
+    command: "server"
+    cap_add:
+      - IPC_LOCK  
+
+volumes:
+  consul-agent-1:
+  consul-agent-2:
+  consul-agent-3:
+  consul-server-1:
+  consul-server-2:
+  consul-bootstrap:
+    
+networks:
+  vault-consul:       
