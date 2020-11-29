@@ -1,0 +1,56 @@
+version: '3'
+
+services:
+  ldap-manager:
+    image: wheelybird/ldap-user-manager:latest
+    ports:
+      - '80:80'
+    environment: 
+      SERVER_HOSTNAME: "localhost"
+      LDAP_URI: "ldap://openldap"
+      LDAP_BASE_DN: "dc=pablo,dc=com"
+      LDAP_ADMINS_GROUP: "admins"
+      LDAP_ADMIN_BIND_DN: "cn=admin,dc=pablo,dc=com"
+      LDAP_ADMIN_BIND_PWD: "admin"
+      NO_HTTPS: "true"
+    networks: 
+      - ldap-net
+
+  openldap:
+    image: osixia/openldap:latest
+    container_name: openldap
+    ports:
+      - "389:389"
+      - "636:636"
+    environment:
+      LDAP_ORGANISATION: "Pablo Inc."
+      LDAP_DOMAIN: "pablo.com"
+      LDAP_ADMIN_PASSWORD: "admin"
+      LDAP_CONFIG_PASSWORD: "admin"
+      LDAP_RFC2307BIS_SCHEMA: "true"
+      LDAP_REMOVE_CONFIG_AFTER_SETUP: "true"
+      LDAP_TLS: "false"
+    tty: true
+    stdin_open: true
+    networks:
+      - ldap-net
+    volumes:
+      - ldap_data:/var/lib/ldap
+      - slapd_data:/etc/ldap/slapd.d
+  
+  jenkins:
+    image: jenkins/jenkins
+    ports:
+      - '8080:8080'
+    networks:
+      - ldap-net
+
+volumes:
+  ldap_data:
+    driver: local
+  slapd_data:
+    driver: local  
+    
+
+networks:
+  ldap-net:
