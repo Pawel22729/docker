@@ -1,0 +1,164 @@
+version: '2.2'
+services:
+  master01:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.10.0
+    container_name: master01
+    environment:
+      - node.name=master01
+      - node.roles=master
+      - cluster.name=es-docker-cluster
+      - discovery.seed_hosts=master02,master03
+      - cluster.initial_master_nodes=master01,master02,master03
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - master01:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+    networks:
+      - elastic
+  master02:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.10.0
+    container_name: master02
+    environment:
+      - node.name=master02
+      - node.roles=master
+      - cluster.name=es-docker-cluster
+      - discovery.seed_hosts=master01,master03
+      - cluster.initial_master_nodes=master01,master02,master03
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - master02:/usr/share/elasticsearch/data
+    networks:
+      - elastic
+  master03:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.10.0
+    container_name: master03
+    environment:
+      - node.name=master03
+      - node.roles=master
+      - cluster.name=es-docker-cluster
+      - discovery.seed_hosts=master01,master02
+      - cluster.initial_master_nodes=master01,master02,master03
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - master03:/usr/share/elasticsearch/data
+    networks:
+      - elastic
+
+  data01:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.10.0
+    container_name: data01
+    environment:
+      - node.name=data01
+      - node.roles=data,ingest
+      - cluster.name=es-docker-cluster
+      - discovery.seed_hosts=master01,master02,master03
+      - cluster.initial_master_nodes=master01,master02,master03
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - data01:/usr/share/elasticsearch/data
+    networks:
+      - elastic
+
+  data02:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.10.0
+    container_name: data02
+    environment:
+      - node.name=data02
+      - node.roles=data,ingest
+      - cluster.name=es-docker-cluster
+      - discovery.seed_hosts=master01,master02,master03
+      - cluster.initial_master_nodes=master01,master02,master03
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - data02:/usr/share/elasticsearch/data
+    networks:
+      - elastic
+
+  data03:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.10.0
+    container_name: data03
+    environment:
+      - node.name=data03
+      - node.roles=data,ingest
+      - cluster.name=es-docker-cluster
+      - discovery.seed_hosts=master01,master02,master03
+      - cluster.initial_master_nodes=master01,master02,master03
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - data03:/usr/share/elasticsearch/data
+    networks:
+      - elastic
+
+  coordinator01:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.10.0
+    container_name: coordinator01
+    environment:
+      - node.name=coordinator01
+      - node.master=false 
+      - node.data=false 
+      - node.ingest=false
+      - cluster.name=es-docker-cluster
+      - discovery.seed_hosts=master01,master02,master03
+      - cluster.initial_master_nodes=master01,master02,master03
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - coordinator01:/usr/share/elasticsearch/data
+    networks:
+      - elastic
+
+volumes:
+  master01:
+    driver: local
+  master02:
+    driver: local
+  master03:
+    driver: local
+  data01:
+    driver: local
+  data02:
+    driver: local
+  data03:
+    driver: local
+  coordinator01:
+    driver: local
+
+networks:
+  elastic:
+    driver: bridge
+
